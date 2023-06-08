@@ -17,7 +17,11 @@ export default function APIUtils() {
     };
     return fetch(baseURL + apiURL, request).then((response) => {
       if (response.ok) return response.json();
-      return response;
+      if (!response.ok) {
+        return response.text().then((text) => {
+          throw new Error(`API Request Failed due to ${text}`);
+        });
+      }
     });
   }
 
